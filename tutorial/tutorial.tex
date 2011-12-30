@@ -101,11 +101,11 @@
 
 \section{Introdução}
 
-\section{Templates to GHDL (t2ghdl)}
-O projeto t2ghdl tem como objetivo a criação de templates ou modelos para facilitar a criação, execução de projetos em VHDL na ferramenta GHDL.
-O t2ghdl está disponível para download na página do Prof. Rogério (http://rag.pro.br).
-Dentro do diretório do t2ghdl tem uma diretório de templates (entidade e testbench), um arquivo README.txt (como os comandos básicos), o Makefile (que faz todo o trabalho) e este tutorial.
-Os comandos de utilização seguem a sintaxe apresentada na Tabela~\ref{tab:comandos_t2ghdl}.
+\section{GHDL Code Gen (gcg)}
+O projeto gcg tem como objetivo a criação de templates ou modelos para facilitar a criação, execução de projetos em VHDL na ferramenta GHDL.
+O código do gcg está disponível para download em sua página no google code (http://code.google.com/p/gcg/).
+Dentro do diretório do gcg/src tem uma diretório de templates (entidade e testbench), um arquivo README.txt (como os comandos básicos), o Makefile (que faz todo o trabalho).
+Os comandos de utilização seguem a sintaxe apresentada na Tabela~\ref{tab:comandos_gcg}.
 
 \begin{table}[H]
 \centering
@@ -125,7 +125,7 @@ Tudo & make all TESTBENCH=nomeDoProjeto\_tb \\
 Apagar diretório de simulação & make clean \\
 \hline
 \end{tabular}
-\label{tab:comandos_t2ghdl}
+\label{tab:comandos_gcg}
 \end{table}
 
 Makefile do modelo de projeto foi alterado para permitir a criação dos componentes com o mesmo comando, no mesmo projeto. A próxima seção exemplifica essa ideia de termos componentes formados por subcomponentes, e a forma de criarmos do componente mais simples para o mais complexo.

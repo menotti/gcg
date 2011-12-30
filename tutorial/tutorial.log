@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.4.6)  2 AUG 2011 21:45
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.11.20)  30 DEC 2011 15:00
 entering extended mode
  %&-line parsing enabled.
 **tutorial.tex
 (./tutorial.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, noh
-yphenation, loaded.
+yphenation, portuguese, loaded.
 (/usr/share/texmf-texlive/tex/latex/base/report.cls
 Document Class: report 2007/10/19 v1.4h Standard LaTeX document class
 (/usr/share/texmf-texlive/tex/latex/base/size10.clo
@@ -54,15 +54,10 @@ File: babel.def 2008/07/06 v3.8l Babel common definitions
 \babel@savecnt=\count89
 \U@D=\dimen103
 )
-
-Package babel Warning: No hyphenation patterns were loaded for
-(babel)                the language `Portuguese'
-(babel)                I will use the patterns loaded for \language=0 instead.
-
-\l@portuges = a dialect from \language0
 \l@brazil = a dialect from \language\l@portuges 
 Package babel Info: Making " an active character on input line 145.
-)) (/usr/share/texmf-texlive/tex/latex/graphics/graphicx.sty
+))
+(/usr/share/texmf-texlive/tex/latex/graphics/graphicx.sty
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
 
 (/usr/share/texmf-texlive/tex/latex/graphics/keyval.sty
@@ -340,6 +335,12 @@ File: uni-0.def 2004/10/17 UCS: Unicode data U+0000..U+00FF
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 102.
+
+Overfull \hbox (7.48717pt too wide) in paragraph at lines 105--109
+\OT1/ptm/m/n/10 dis-pon[]^^Pvel para down-load em sua p[]agina no go-o-gle code
+ (http://code.google.com/p/gcg/).
+ []
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 113.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
@@ -349,6 +350,12 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 
 Overfull \hbox (2.83646pt too wide) in paragraph at lines 113--129
  [][] 
+ []
+
+
+Overfull \hbox (15.75659pt too wide) in paragraph at lines 135--137
+\OT1/ptm/m/n/10 Tomemos ent[]ao como exem-plo o nosso pro-jeto de uma ULA (Uni-
+dade L[]ogica e Aritm[]etica)
  []
 
 <figuras/ULA_000.png, id=6, 1316.92pt x 682.55pt>
@@ -371,14 +378,8 @@ File: figuras/decodificador.png Graphic file (type png)
 <use figuras/decodificador.png> [3 <./figuras/somador.png (PNG copy)> <./figura
 s/decodificador.png (PNG copy)>]
 Overfull \hbox (13.2471pt too wide) in paragraph at lines 199--200
-[]\OT1/ptm/m/n/10 As opera[][]oes su-por-tadas pelo De-cod-i-fi-cador de Op0 a 
-Op6 ir[]ao se-le-cionar as opera[][]oes
- []
-
-
-Overfull \hbox (11.98717pt too wide) in paragraph at lines 199--200
-\OT1/ptm/m/n/10 que a Unidade L[]ogica re-al-iza de OpAND a Op-NOT, con-forme p
-ode ser visto na Figura 1.5[].
+[]\OT1/ptm/m/n/10 As opera[][]oes su-por-ta-das pelo De-co-di-fi-ca-dor de Op0 
+a Op6 ir[]ao se-le-ci-o-nar as opera[][]oes
  []
 
 <figuras/unidadeLogica.png, id=21, 983.675pt x 686.565pt>
@@ -393,31 +394,31 @@ File: figuras/gtw_and2.png Graphic file (type png)
 
 <use figuras/gtw_and2.png> [7] [8 <./figuras/gtw_and2.png (PNG copy)>]
 Overfull \hbox (38.22577pt too wide) in paragraph at lines 394--395
-[]\OT1/ptm/m/n/10 At[]e aqui, im-ple-men-ta-mos to-dos os com-po-nentes prin-ci
--pais necess[]arios para a implementa[][]ao
+[]\OT1/ptm/m/n/10 At[]e aqui, im-ple-men-ta-mos to-dos os com-po-nen-tes prin-c
+i-pais ne-cess[]arios para a implementa[][]ao
  []
 
 
 Overfull \hbox (19.30785pt too wide) in paragraph at lines 394--395
-\OT1/ptm/m/n/10 da ULA. Ent[]ao pode-mos criar a en-ti-dade ULA, com o co-mando
- ap-re-sen-tado no C[]odigo 1.10[]. 
+\OT1/ptm/m/n/10 da ULA. Ent[]ao po-de-mos criar a en-ti-dade ULA, com o co-mand
+o apre-sen-tado no C[]odigo 1.10[]. 
  []
 
 [9] (./tutorial.aux) ) 
 Here is how much of TeX's memory you used:
- 6050 strings out of 495061
- 81079 string characters out of 1182622
- 235251 words of memory out of 3000000
- 9154 multiletter control sequences out of 15000+50000
+ 6049 strings out of 495041
+ 81066 string characters out of 1181896
+ 235265 words of memory out of 3000000
+ 9159 multiletter control sequences out of 15000+50000
  33232 words of font info for 76 fonts, out of 3000000 for 9000
- 28 hyphenation exceptions out of 8191
+ 30 hyphenation exceptions out of 8191
  36i,12n,40p,411b,1614s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</u
 sr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/te
 xmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/ty
 pe1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8
 a.pfb>
-Output written on tutorial.pdf (10 pages, 202953 bytes).
+Output written on tutorial.pdf (10 pages, 202907 bytes).
 PDF statistics:
  58 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
