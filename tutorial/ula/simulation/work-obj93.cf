@@ -1,7 +1,0 @@
-v 3
-file "/dados/rogerio/UTFPR/docencia/disciplinas/2011/LD__LD31A/1_2011/aulas/cod/LD31A__2011_1__aula__006__cod/t2ghdl/tutorial/ula/" "testbench/and2_tb.vhd" "20110720172527.000" "20110720142701.730":
-  entity and2_tb at 7( 126) + 0 on 13;
-  architecture logica of and2_tb at 13( 202) + 0 on 14;
-file "/dados/rogerio/UTFPR/docencia/disciplinas/2011/LD__LD31A/1_2011/aulas/cod/LD31A__2011_1__aula__006__cod/t2ghdl/tutorial/ula/" "src/and2.vhd" "20110720172653.000" "20110720142701.692":
-  entity and2 at 6( 129) + 0 on 11;
-  architecture logica of and2 at 14( 279) + 0 on 12;
