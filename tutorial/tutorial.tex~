@@ -1,5 +1,5 @@
-\documentclass[a4paper,12pt]{report}
-\usepackage[utf8x]{inputenc}
+\documentclass[a4paper,11pt]{report}
+\usepackage[utf8]{inputenc}
 
 \usepackage[brazil]{babel}
 \usepackage[dvips]{graphicx}
@@ -248,95 +248,13 @@ O Código~\ref{cod:and2} mostra como o código VHDL para a entidade and2 foi cri
 
 \lstset{language=VHDL}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
-\begin{lstlisting}[label=cod:and2,caption=Código VHDL da entidade and2]
--- Projeto gerado via script.
--- Data: Qua,20/07/2011-13:51:31
--- Autor: rogerio
--- Comentario: Descricao da Entidade: and2.
- 
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
- 
-entity and2 is
-  port (a,b: in std_logic; y: out std_logic);
-end and2;
- 
-architecture logica of and2 is
-begin
-  -- Comandos.
-  y <= a and b;
-end logica;
- 
-\end{lstlisting}
+\lstinputlisting[label=cod:and2,caption=Código VHDL da entidade and2]{ula/src/and2.vhd}
 
 No diretorio testbench foi criado o arquivo and2\_tb.vhd que é o testbench para a entidade and2, conforme podemos ver no Código~\ref{cod:and2_tb}, novamente alteramos type para std\_logic e criamos os casos de teste.
 
 \lstset{language=VHDL}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
-\begin{lstlisting}[label=cod:and2_tb,caption=Código VHDL do testebench para entidade and2]
--- Testebench gerado via script.
--- Data: Qua,20/07/2011-14:18:43
--- Autor: rogerio
--- Comentario: Teste da entidade and2.
-
-library ieee;
-use ieee.std_logic_1164.all;
-
-entity and2_tb is
-end and2_tb;
-
-architecture logica of and2_tb is
-  --  Declaracao do componente.
-  component and2
-    	port (a,b: in std_logic; y: out std_logic);
-  end component;
-  --  Especifica qual a entidade esta vinculada com o componente.
-  for and2_0: and2 use entity work.and2;
-      signal s_t_a, s_t_b, s_t_y: std_logic;
-  begin
-    --  Instanciacao do Componente.
-    and2_0: and2 port map (a=>s_t_a,b=>s_t_b,y=>s_t_y);
-
-    --  Processo que faz o trabalho.
-    process
-	-- Um registro e criado com as entradas e saidas da entidade.
-	-- (<<entrada1>>, <<entradaN>>, <<saida1>>, <<saidaN>>)
-	type pattern_type is record
-	-- entradas.
-		vi_a,vi_b: std_logic;
-	-- saidas.
-		vo_y: std_logic;
-	end record;
-
-	--  Os padroes de entrada sao aplicados (injetados) as entradas.
-	type pattern_array is array (natural range <>) of pattern_type;
-	constant patterns : pattern_array :=
-	(
-		('0', '0', '0'),
-		('0', '1', '0'),
-		('1', '0', '0'),
-		('1', '1', '1')						
-	);
-	begin
-	  --  Checagem de padroes.
-	  for i in patterns'range loop
-	    --  Injeta as entradas.
-		s_t_a <= patterns(i).vi_a;
-		s_t_b <= patterns(i).vi_b;
-				
-		--  Aguarda os resultados.
-		wait for 1 ns;
-		--  Checa o resultado com a saida esperada no padrao.
-		assert s_t_y = patterns(i).vo_y	report "Valor de s_t_y nao confere com o resultado esperado." severity error;
-						
-	  end loop;
-	  assert false report "Fim do teste." severity note;
-	  --  Wait forever; Isto finaliza a simulacao.
-	  wait;
-	end process;
-end logica;
-\end{lstlisting}
+\lstinputlisting[label=cod:and2_tb,caption=Código VHDL do testebench para entidade and2] {ula/testbench/and2_tb.vhd}
 
 Executando o comando make apresentado no Código~\ref{cod:testa:and2}, se tudo estiver correto, a entidade and2 será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
 
@@ -354,6 +272,94 @@ O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:and2}.
 \label{fig:gtw:and2}
 \end{figure}
 
+% and3, xor2 e or3
+O Código~\ref{cod:and3} mostra o código VHDL para a entidade and3 que foi criado pelo comando make, da mesma forma sendo necessário somente colocarmos o tipo das variáveis e a expressão lógica (y <= a and b and c) para que o resultado seja gerado corretamente.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:and3,caption=Código VHDL da entidade and3]{ula/src/and3.vhd}
+
+No diretorio testbench também foi criado o arquivo and3\_tb.vhd que é o testbench para a entidade and3, conforme podemos ver no Código~\ref{cod:and3_tb}, novamente alteramos <<type>> para std\_logic e criamos os casos de teste.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:and3_tb,caption=Código VHDL do testebench para entidade and3] {ula/testbench/and3_tb.vhd}
+
+Executando o comando make apresentado no Código~\ref{cod:testa:and3}, se tudo estiver correto, a entidade and3 será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
+
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\begin{lstlisting}[label=cod:testa:and3,caption=Comando para executar o testbench da entidade and3.]
+  make all TESTBENCH=and3_tb
+\end{lstlisting}
+
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:and3}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/gtw_and3.png}
+\caption{Diagrama de Tempo do teste da entidade and3.}
+\label{fig:gtw:and3}
+\end{figure}
+
+% xor2
+O Código~\ref{cod:xor2} mostra o código VHDL para a entidade xor2 que foi criado pelo comando make, da mesma forma sendo necessário somente colocarmos o tipo das variáveis e a expressão lógica (y <= a xor b) para que o resultado seja gerado corretamente.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:xor2,caption=Código VHDL da entidade xor2]{ula/src/xor2.vhd}
+
+No diretorio testbench também foi criado o arquivo xor2\_tb.vhd que é o testbench para a entidade xor2, conforme podemos ver no Código~\ref{cod:xor2_tb}, novamente alteramos <<type>> para std\_logic e criamos os casos de teste.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:xor2_tb,caption=Código VHDL do testebench para entidade xor2] {ula/testbench/xor2_tb.vhd}
+
+Executando o comando make apresentado no Código~\ref{cod:testa:xor2}, se tudo estiver correto, a entidade xor2 será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
+
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\begin{lstlisting}[label=cod:testa:xor2,caption=Comando para executar o testbench da entidade xor2.]
+  make all TESTBENCH=xor2_tb
+\end{lstlisting}
+
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:xor2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/gtw_xor2.png}
+\caption{Diagrama de Tempo do teste da entidade xor2.}
+\label{fig:gtw:xor2}
+\end{figure}
+
+% or3
+O Código~\ref{cod:or3} mostra o código VHDL para a entidade or3 que foi criado pelo comando make, da mesma forma sendo necessário somente colocarmos o tipo das variáveis e a expressão lógica (y <= a xor b) para que o resultado seja gerado corretamente.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:or3,caption=Código VHDL da entidade or3]{ula/src/or3.vhd}
+
+No diretorio testbench também foi criado o arquivo or3\_tb.vhd que é o testbench para a entidade or3, conforme podemos ver no Código~\ref{cod:or3_tb}, novamente alteramos <<type>> para std\_logic e criamos os casos de teste.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:or3_tb,caption=Código VHDL do testebench para entidade or3] {ula/testbench/or3_tb.vhd}
+
+Executando o comando make apresentado no Código~\ref{cod:testa:or3}, se tudo estiver correto, a entidade or3 será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
+
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\begin{lstlisting}[label=cod:testa:or3,caption=Comando para executar o testbench da entidade or3.]
+  make all TESTBENCH=or3_tb
+\end{lstlisting}
+
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:or3}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/gtw_or3.png}
+\caption{Diagrama de Tempo do teste da entidade or3.}
+\label{fig:gtw:or3}
+\end{figure}
+
+% Somador.
 Criadas as entidades básicas necessárias, então podemos criar a entidade principal Somador com o comando apresentado no Código~\ref{cod:criar:somador}. O Somador foi criado com a arquitetura estrutural com o valor da variável ARCH=estrutural.
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
@@ -361,20 +367,83 @@ Criadas as entidades básicas necessárias, então podemos criar a entidade prin
   make new PROJECT=somador ARCH=estrutural IN=A,B,Cin,OpSomador OUT=S,Cout
 \end{lstlisting}
 
-Criada a entidade Somador apenas é necessário terminar a implementação do testbench para esta entidade, que neste caso consiste em criar os casos te teste.
-Com o Somador funcionando, podemos ir para a próxima entidade, o Decodificador.
-O Decodificador depende de algumas entidades básicas, a maioria já foi criada para satisfazer as dependências da entidade Somador, restando apenas a criação de um inversor, conforme o Código~\ref{cod:criar:inversor}.
+Criada a entidade Somador apenas é necessário terminar a implementação da arquitetura e do testbench para a entidade.
+
+O Código~\ref{cod:somador} mostra o código VHDL para a entidade somador que foi criado pelo comando make, sendo necessário implementarmos sua função lógica pelo mapeamento das estruturas (port map), já que definimos sua arquitetura como estrutural.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:somador,caption=Código VHDL da entidade somador]{ula/src/somador.vhd}
+
+No diretorio testbench também foi criado o arquivo somador\_tb.vhd que é o testbench para a entidade somador, conforme podemos ver no Código~\ref{cod:somador_tb}, novamente alteramos <<type>> para std\_logic e criamos os casos de teste.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:somador_tb,caption=Código VHDL do testebench para entidade somador] {ula/testbench/somador_tb.vhd}
+
+Executando o comando make apresentado no Código~\ref{cod:testa:somador}, se tudo estiver correto, a entidade somador será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
-\begin{lstlisting}[label=cod:criar:inversor,caption=Comando para a criar a entidade Inversor.]
-  make new PROJECT=inversor ARCH=logica
+\begin{lstlisting}[label=cod:testa:somador,caption=Comando para executar o testbench da entidade somador.]
+  make all TESTBENCH=somador_tb
 \end{lstlisting}
+
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:somador}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/gtw_somador.png}
+\caption{Diagrama de Tempo do teste da entidade somador.}
+\label{fig:gtw:somador}
+\end{figure}
+
+Com o Somador funcionando, podemos ir para a próxima entidade, o Decodificador.
+O Decodificador depende de algumas entidades básicas, a maioria já foi criada para satisfazer as dependências da entidade Somador, restando apenas a criação de um inversor, conforme o Código~\ref{cod:criar:inversor}.
+% inversor.
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\begin{lstlisting}[label=cod:criar:inversor,caption=Comando para a criar a entidade Inversor.]
+  make new PROJECT=inversor ARCH=logica IN=a OUT=y
+\end{lstlisting}
+
+O Código~\ref{cod:inversor} mostra o código VHDL para a entidade inversor que foi criado pelo comando make, da mesma forma sendo necessário somente colocarmos o tipo das variáveis e a expressão lógica (y <= a xor b) para que o resultado seja gerado corretamente.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:inversor,caption=Código VHDL da entidade inversor]{ula/src/inversor.vhd}
+
+No diretorio testbench também foi criado o arquivo inversor\_tb.vhd que é o testbench para a entidade inversor, conforme podemos ver no Código~\ref{cod:inversor_tb}, novamente alteramos <<type>> para std\_logic e criamos os casos de teste.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:inversor_tb,caption=Código VHDL do testebench para entidade inversor] {ula/testbench/inversor_tb.vhd}
+
+Executando o comando make apresentado no Código~\ref{cod:testa:inversor}, se tudo estiver correto, a entidade inversor será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
+
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\begin{lstlisting}[label=cod:testa:inversor,caption=Comando para executar o testbench da entidade inversor.]
+  make all TESTBENCH=inversor_tb
+\end{lstlisting}
+
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:inversor}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/gtw_inversor.png}
+\caption{Diagrama de Tempo do teste da entidade inversor.}
+\label{fig:gtw:inversor}
+\end{figure}
+
+
+
+
+
+
 
 Com todas as dependências do Decodificador satisfeitas, podemos então criá-lo, com o comando apresenta no Código~\ref{cod:criar:decodificador}.
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
 \begin{lstlisting}[label=cod:criar:decodificador,caption=Comando para a criar a entidade Decodificador.]
-  make new PROJECT=decodificador ARCH=estrutural
+  make new PROJECT=decodificador ARCH=estrutural IN=F0,F1,F2 OUT=Op0,Op1,Op2,Op3,Op4,Op5,Op6,Op7
 \end{lstlisting}
 
 Implementa-se a entidade e testbench do decodificador, deixando-o funcionando.

@@ -1,8 +1,15 @@
-\documentclass[a4paper,10pt]{report}
-\usepackage[utf8x]{inputenc}
+\documentclass[a4paper,11pt]{report}
+\usepackage[utf8]{inputenc}
 
 \usepackage[brazil]{babel}
+\usepackage[dvips]{graphicx}
 \usepackage{graphicx, url}
+
+\usepackage[center]{caption}
+\usepackage[alf,abnt-emphasize=bf,abnt-full-initials=yes]{abntcite} %Pacote abntex -  http://abntex.codigolivre.org.br/
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{setspace}
+
 \usepackage{listings} % para código fonte
 
 \usepackage{amssymb,amsmath}
@@ -12,23 +19,71 @@
 \usepackage{float} % para controlar o floating de objetos.
 
 % opções do pacote listings
+\usepackage[usenames]{color}
+
+\definecolor{red}{rgb}{0.6,0,0} % for strings
+\definecolor{green}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{purple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{docblue}{rgb}{0.25,0.35,0.75} % javadoc
+
+\definecolor{DarkBlue}{rgb}{0,0,0.61}
+\definecolor{DarkGreen}{rgb}{0,0.4,0}
+
 \lstset{
-	numbers=left,
-	language=make,
-	stepnumber=1,
-	firstnumber=1,
-	numberstyle=\tiny,
-	extendedchars=true,
-	breaklines=true,
-	showtabs=false,
-	tabsize=2,
-	frame=tb,
-	basicstyle=\footnotesize,
-	stringstyle=\ttfamily,
-	showstringspaces=false
-	backgroundcolor=\color{gray}
-	font=monospace
+  language=VHDL,
+  basicstyle=\ttfamily,
+  keywordstyle=\color{purple}\bfseries,
+  stringstyle=\color{red},
+  commentstyle=\color{green},
+  morecomment=[s][\color{docblue}]{/*}{*/},
+  numbers=left,
+  numberstyle=\tiny\color{black},
+  stepnumber=2,
+  numbersep=10pt,
+  tabsize=4,
+  showspaces=false,
+  showstringspaces=false,
+  otherkeywords={\#include, \#define, \#pragma, \#typedef, dim3},
+  emph={ PROJECT, ARCH, IN, OUT},
+  emphstyle=\color{DarkBlue}\bfseries,
+  emph={[2] make, std_logic},
+  emphstyle=[2]\color{DarkGreen},
+  extendedchars=true,
+  frame=tb,
+  breaklines=true
 }
+
+\usepackage{caption}
+\DeclareCaptionFont{black}{\color{black}}
+%\DeclareCaptionFormat{listing}{\colorbox[rgb]{1,1,1}{\parbox[c]{\textwidth}{#1#2#3}}}
+%\captionsetup[lstlisting]{format=listing, labelfont=black, textfont=black, singlelinecheck=false, margin=0pt, font={bf,footnotesize}}
+
+% \definecolor{DarkBlue}{rgb}{0,0.08,0.45}
+% \definecolor{DarkGreen}{rgb}{0,0.45,0.8}
+% 
+% \definecolor{gray}{gray}{0.5}
+% \definecolor{key}{rgb}{0,0.5,0}
+
+
+
+
+% \lstset{
+% 	numbers=left,
+% 	language=make,
+% 	stepnumber=1,
+% 	firstnumber=1,
+% 	numberstyle=\tiny,
+% 	extendedchars=true,
+% 	breaklines=true,
+% 	showtabs=false,
+% 	tabsize=2,
+% 	frame=tb,
+% 	basicstyle=\footnotesize,
+% 	stringstyle=\ttfamily,
+% 	showstringspaces=false
+% 	backgroundcolor=\color{gray}
+% 	font=monospace
+% }
 
 \renewcommand{\lstlistingname}{Código}
 
@@ -53,33 +108,32 @@
 
 \section{Introdução}
 
-\section{Templates to GHDL (t2ghdl)}
-O projeto t2ghdl tem como objetivo a criação de templates ou modelos para facilitar a criação, execução de projetos em VHDL na ferramenta GHDL.
-O t2ghdl está disponível para download na página do Prof. Rogério (http://rag.pro.br).
-Dentro do diretório do t2ghdl tem uma diretório de templates (entidade e testbench), um arquivo README.txt (como os comandos básicos), o Makefile (que faz todo o trabalho) e este tutorial.
-Os comandos de utilização seguem a sintaxe:
+\section{GHDL Code Gen (gcg)}
+O projeto gcg tem como objetivo a criação de templates ou modelos para facilitar a criação, execução de projetos em VHDL na ferramenta GHDL.
+O código do gcg está disponível para download em http://code.google.com/p/gcg/.
+Dentro do diretório do gcg/src tem uma diretório de templates (entidade e testbench), um arquivo README.txt (como os comandos básicos), o Makefile (que faz todo o trabalho).
+Os comandos de utilização seguem a sintaxe apresentada na Tabela~\ref{tab:comandos_gcg}.
 
 \begin{table}[H]
 \centering
 \caption{Comandos} % igual ao ambiente figura
 \begin{tabular}{ll} % com este comando dizemos quantas colunas terá nossa tabela e a posição do texto dentro de cada coluna. Aqui temos três colunas (pois são três "c" dentre {}) e o texto estará centralizado em todas elas (indicado pelo "c", se quisermos alinhados à esquerda "l" ou direita "r"
 \hline % este comando coloca uma linha na tabela
-Comando & Ação, Significado \\ % esta é a primeira linha de nossa tabela. O símbolo "&" separa as colunas e "\\" indica que aquela linha acabou.
+Ação & Comando \\ % esta é a primeira linha de nossa tabela. O símbolo "&" separa as colunas e "\\" indica que aquela linha acabou.
 \hline
 \hline
-000 & Op0 & Operação AND, realizada pela Unidade Lógica. \\
-
+Criar projeto e arquivos iniciais & make new PROJECT=nomeDoProjeto \\
+" " & ARCH=tipoArquitetura IN=porta1,porta2,portaN \\ 
+" " & OUT=porta1,porta2,portaN \\
+Compilar & make compile TESTBENCH=nomeDoProjeto\_tb \\
+Executar & make run TESTBENCH=nomeDoProjeto\_tb \\
+Visualizar & make view TESTBENCH=nomeDoProjeto\_tb \\
+Tudo & make all TESTBENCH=nomeDoProjeto\_tb \\
+Apagar diretório de simulação & make clean \\
 \hline
 \end{tabular}
-\label{tab:decod_operacoes}
+\label{tab:comandos_gcg}
 \end{table}
-
-% \begin{description}
-% \item [Criar diretórios do projeto e arquivos iniciais:] \emph{``make new PROJECT=nomeDoProjeto ARCH=tipoArquitetura IN=porta1,porta2,portaN OUT=porta1,porta2,portaN''}. Onde PROJECT:
-% \item [Compilar, executar e visualizar:] \emph{``make compile TESTBENCH=nomeDoProjeto_tb''}, \emph{``make run TESTBENCH=nomeDoProjeto_tb''}, \emph{``make view TESTBENCH=nomeDoProjeto_tb''}. Onde TESTBENCH.
-% \item[Comando faz tudo: compila, executa e visualiza:] \emph{``make all TESTBENCH=nomeDoProjeto_tb''}.
-% \item[Comando para apagar diretorio de simulacao:] \emph{``make clean''}
-% \end{description}
 
 Makefile do modelo de projeto foi alterado para permitir a criação dos componentes com o mesmo comando, no mesmo projeto. A próxima seção exemplifica essa ideia de termos componentes formados por subcomponentes, e a forma de criarmos do componente mais simples para o mais complexo.
 
@@ -177,7 +231,7 @@ UnidadeLogica & or3, and2, or2, nand2, nor2, xor2, xnor2 e inversor \\
 \label{tab:dep_componentes}
 \end{table} 
 
-\section{Criação dos Componentes com o t2ghdl}
+\section{Criação dos Componentes com o gcg}
 
 Para satisfazer as dependências da entidade Somador precisamos então criar os componentes básicos, and2, and3, or3 e xor2. O Código~\ref{cod:criar:ent_basicas} apresenta os comandos do Makefile para obter esse resultado. Note que a arquitetura para esses elementos básicos, neste caso portas lógicas, foi definida como lógica, por meio da variável ARCH.
 
@@ -194,95 +248,13 @@ O Código~\ref{cod:and2} mostra como o código VHDL para a entidade and2 foi cri
 
 \lstset{language=VHDL}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
-\begin{lstlisting}[label=cod:and2,caption=Código VHDL da entidade and2]
--- Projeto gerado via script.
--- Data: Qua,20/07/2011-13:51:31
--- Autor: rogerio
--- Comentario: Descricao da Entidade: and2.
- 
-library ieee;
-use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;
- 
-entity and2 is
-  port (a,b: in std_logic; y: out std_logic);
-end and2;
- 
-architecture logica of and2 is
-begin
-  -- Comandos.
-  y <= a and b;
-end logica;
- 
-\end{lstlisting}
+\lstinputlisting[label=cod:and2,caption=Código VHDL da entidade and2]{ula/src/and2.vhd}
 
 No diretorio testbench foi criado o arquivo and2\_tb.vhd que é o testbench para a entidade and2, conforme podemos ver no Código~\ref{cod:and2_tb}, novamente alteramos type para std\_logic e criamos os casos de teste.
 
 \lstset{language=VHDL}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
-\begin{lstlisting}[label=cod:and2_tb,caption=Código VHDL do testebench para entidade and2]
--- Testebench gerado via script.
--- Data: Qua,20/07/2011-14:18:43
--- Autor: rogerio
--- Comentario: Teste da entidade and2.
-
-library ieee;
-use ieee.std_logic_1164.all;
-
-entity and2_tb is
-end and2_tb;
-
-architecture logica of and2_tb is
-  --  Declaracao do componente.
-  component and2
-    	port (a,b: in std_logic; y: out std_logic);
-  end component;
-  --  Especifica qual a entidade esta vinculada com o componente.
-  for and2_0: and2 use entity work.and2;
-      signal s_t_a, s_t_b, s_t_y: std_logic;
-  begin
-    --  Instanciacao do Componente.
-    and2_0: and2 port map (a=>s_t_a,b=>s_t_b,y=>s_t_y);
-
-    --  Processo que faz o trabalho.
-    process
-	-- Um registro e criado com as entradas e saidas da entidade.
-	-- (<<entrada1>>, <<entradaN>>, <<saida1>>, <<saidaN>>)
-	type pattern_type is record
-	-- entradas.
-		vi_a,vi_b: std_logic;
-	-- saidas.
-		vo_y: std_logic;
-	end record;
-
-	--  Os padroes de entrada sao aplicados (injetados) as entradas.
-	type pattern_array is array (natural range <>) of pattern_type;
-	constant patterns : pattern_array :=
-	(
-		('0', '0', '0'),
-		('0', '1', '0'),
-		('1', '0', '0'),
-		('1', '1', '1')						
-	);
-	begin
-	  --  Checagem de padroes.
-	  for i in patterns'range loop
-	    --  Injeta as entradas.
-		s_t_a <= patterns(i).vi_a;
-		s_t_b <= patterns(i).vi_b;
-				
-		--  Aguarda os resultados.
-		wait for 1 ns;
-		--  Checa o resultado com a saida esperada no padrao.
-		assert s_t_y = patterns(i).vo_y	report "Valor de s_t_y nao confere com o resultado esperado." severity error;
-						
-	  end loop;
-	  assert false report "Fim do teste." severity note;
-	  --  Wait forever; Isto finaliza a simulacao.
-	  wait;
-	end process;
-end logica;
-\end{lstlisting}
+\lstinputlisting[label=cod:and2_tb,caption=Código VHDL do testebench para entidade and2] {ula/testbench/and2_tb.vhd}
 
 Executando o comando make apresentado no Código~\ref{cod:testa:and2}, se tudo estiver correto, a entidade and2 será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
 
@@ -291,7 +263,7 @@ Executando o comando make apresentado no Código~\ref{cod:testa:and2}, se tudo e
   make all TESTBENCH=and2_tb
 \end{lstlisting}
 
-O digrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:and2}.
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:and2}.
 
 \begin{figure}[H]
 \centering
@@ -300,6 +272,47 @@ O digrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:and2}.
 \label{fig:gtw:and2}
 \end{figure}
 
+% and3, xor2 e or3
+O Código~\ref{cod:and3} mostra o código VHDL para a entidade and3 que foi criado pelo comando make, da mesma forma sendo necessário somente colocarmos o tipo das variáveis e a expressão lógica (y <= a and b and c) para que o resultado seja gerado corretamente.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:and3,caption=Código VHDL da entidade and3]{ula/src/and3.vhd}
+
+No diretorio testbench também foi criado o arquivo and3\_tb.vhd que é o testbench para a entidade and3, conforme podemos ver no Código~\ref{cod:and3_tb}, novamente alteramos <<type>> para std\_logic e criamos os casos de teste.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:and3_tb,caption=Código VHDL do testebench para entidade and3] {ula/testbench/and3_tb.vhd}
+
+Executando o comando make apresentado no Código~\ref{cod:testa:and3}, se tudo estiver correto, a entidade and3 será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
+
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\begin{lstlisting}[label=cod:testa:and3,caption=Comando para executar o testbench da entidade and3.]
+  make all TESTBENCH=and3_tb
+\end{lstlisting}
+
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:and3}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/gtw_and3.png}
+\caption{Diagrama de Tempo do teste da entidade and3.}
+\label{fig:gtw:and3}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+
 Criadas as entidades básicas necessárias, então podemos criar a entidade principal Somador com o comando apresentado no Código~\ref{cod:criar:somador}. O Somador foi criado com a arquitetura estrutural com o valor da variável ARCH=estrutural.
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
@@ -307,20 +320,20 @@ Criadas as entidades básicas necessárias, então podemos criar a entidade prin
   make new PROJECT=somador ARCH=estrutural IN=A,B,Cin,OpSomador OUT=S,Cout
 \end{lstlisting}
 
-Criada a entidade Somador apenas é necessário terminar a implementação do testbench para esta entidade, que neste caso consiste em criar os casos te teste.
+Criada a entidade Somador apenas é necessário terminar a implementação do testbench para esta entidade, que neste caso consiste em criar os casos de teste.
 Com o Somador funcionando, podemos ir para a próxima entidade, o Decodificador.
 O Decodificador depende de algumas entidades básicas, a maioria já foi criada para satisfazer as dependências da entidade Somador, restando apenas a criação de um inversor, conforme o Código~\ref{cod:criar:inversor}.
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
 \begin{lstlisting}[label=cod:criar:inversor,caption=Comando para a criar a entidade Inversor.]
-  make new PROJECT=inversor ARCH=logica
+  make new PROJECT=inversor ARCH=logica IN=a OUT=y
 \end{lstlisting}
 
 Com todas as dependências do Decodificador satisfeitas, podemos então criá-lo, com o comando apresenta no Código~\ref{cod:criar:decodificador}.
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
 \begin{lstlisting}[label=cod:criar:decodificador,caption=Comando para a criar a entidade Decodificador.]
-  make new PROJECT=decodificador ARCH=estrutural
+  make new PROJECT=decodificador ARCH=estrutural IN=F0,F1,F2 OUT=Op0,Op1,Op2,Op3,Op4,Op5,Op6,Op7
 \end{lstlisting}
 
 Implementa-se a entidade e testbench do decodificador, deixando-o funcionando.

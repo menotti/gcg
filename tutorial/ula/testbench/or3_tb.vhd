@@ -2,18 +2,21 @@
 -- Data: Qua,20/07/2011-13:51:40
 -- Autor: rogerio
 -- Comentario: Teste da entidade or3.
- 
+
+library ieee;
+use ieee.std_logic_1164.all;
+
 entity or3_tb is
 end or3_tb;
 
 architecture logica of or3_tb is
   --  Declaração do componente.
   component or3
-    	port (a,b,c: in <<type>>; y: out <<type>>);
+    	port (a,b,c: in std_logic; y: out std_logic);
   end component;
   --  Especifica qual a entidade está vinculada com o componente.
   for or3_0: or3 use entity work.or3;
-      signal s_t_a, s_t_b, s_t_c, s_t_y: <<type>>;
+      signal s_t_a, s_t_b, s_t_c, s_t_y: std_logic;
   begin
     --  Instanciação do Componente.
 		--  port map (<<p_in_1>> => <<s_t_in_1>>)
@@ -25,9 +28,9 @@ architecture logica of or3_tb is
 				-- (<<entrada1>>, <<entradaN>>, <<saida1>>, <<saidaN>>)
 				type pattern_type is record
 					-- entradas.
-					vi_a,vi_b,vi_c: <<type>>;
+					vi_a,vi_b,vi_c: std_logic;
 					-- saídas.
-					vo_y: <<type>>;
+					vo_y: std_logic;
 				end record;
 
 				--  Os padrões de entrada são aplicados (injetados) às entradas.
@@ -35,7 +38,13 @@ architecture logica of or3_tb is
 				constant patterns : pattern_array :=
 					(
 						('0', '0', '0', '0'),
-						('0', '0', '1', '0')
+						('0', '0', '1', '1'),
+						('0', '1', '0', '1'),
+						('0', '1', '1', '1'),
+						('1', '0', '0', '1'),
+						('1', '0', '1', '1'),
+						('1', '1', '0', '1'),
+						('1', '1', '1', '1')
 					);
 				begin
 					--  Checagem de padrões.

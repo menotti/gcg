@@ -2,6 +2,10 @@
 -- Data: Qua,20/07/2011-13:51:40
 -- Autor: rogerio
 -- Comentario: Teste da entidade and3.
+
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
  
 entity and3_tb is
 end and3_tb;
@@ -9,11 +13,11 @@ end and3_tb;
 architecture logica of and3_tb is
   --  Declaração do componente.
   component and3
-    	port (a,b,c: in <<type>>; y: out <<type>>);
+    	port (a,b,c: in std_logic; y: out std_logic);
   end component;
   --  Especifica qual a entidade está vinculada com o componente.
   for and3_0: and3 use entity work.and3;
-      signal s_t_a, s_t_b, s_t_c, s_t_y: <<type>>;
+      signal s_t_a, s_t_b, s_t_c, s_t_y: std_logic;
   begin
     --  Instanciação do Componente.
 		--  port map (<<p_in_1>> => <<s_t_in_1>>)
@@ -25,9 +29,9 @@ architecture logica of and3_tb is
 				-- (<<entrada1>>, <<entradaN>>, <<saida1>>, <<saidaN>>)
 				type pattern_type is record
 					-- entradas.
-					vi_a,vi_b,vi_c: <<type>>;
+					vi_a, vi_b, vi_c: std_logic;
 					-- saídas.
-					vo_y: <<type>>;
+					vo_y: std_logic;
 				end record;
 
 				--  Os padrões de entrada são aplicados (injetados) às entradas.
@@ -35,7 +39,13 @@ architecture logica of and3_tb is
 				constant patterns : pattern_array :=
 					(
 						('0', '0', '0', '0'),
-						('0', '0', '1', '0')
+						('0', '0', '1', '0'),
+						('0', '1', '0', '0'),
+						('0', '1', '1', '0'),
+						('1', '0', '0', '0'),
+						('1', '0', '1', '0'),
+						('1', '1', '0', '0'),
+						('1', '1', '1', '1')
 					);
 				begin
 					--  Checagem de padrões.
