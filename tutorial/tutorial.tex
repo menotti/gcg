@@ -433,48 +433,192 @@ O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:inversor}.
 \label{fig:gtw:inversor}
 \end{figure}
 
-
-
-
-
-
-
+% Decodificador.
 Com todas as dependências do Decodificador satisfeitas, podemos então criá-lo, com o comando apresenta no Código~\ref{cod:criar:decodificador}.
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
 \begin{lstlisting}[label=cod:criar:decodificador,caption=Comando para a criar a entidade Decodificador.]
-  make new PROJECT=decodificador ARCH=estrutural IN=F0,F1,F2 OUT=Op0,Op1,Op2,Op3,Op4,Op5,Op6,Op7
+  make new PROJECT=decodificador ARCH=estrutural IN=F2,F1,F0 OUT=Op0,Op1,Op2,Op3,Op4,Op5,Op6,Op7
 \end{lstlisting}
 
-Implementa-se a entidade e testbench do decodificador, deixando-o funcionando.
+O Código~\ref{cod:decodificador} mostra o código VHDL para a entidade decodificador que foi criado pelo comando make, da mesma forma sendo necessário somente colocarmos o tipo das variáveis e fazer o mapeamento das portas para que o resultado seja gerado corretamente.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:decodificador,caption=Código VHDL da entidade decodificador]{ula/src/decodificador.vhd}
+
+No diretório testbench também foi criado o arquivo decodificador\_tb.vhd que é o testbench para a entidade decodificador, conforme podemos ver no Código~\ref{cod:decodificador_tb}, novamente alteramos <<type>> para std\_logic e criamos os casos de teste.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:decodificador_tb,caption=Código VHDL do testebench para entidade decodificador] {ula/testbench/decodificador_tb.vhd}
+
+Executando o comando make apresentado no Código~\ref{cod:testa:decodificador}, se tudo estiver correto, a entidade decodificador será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
+
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\begin{lstlisting}[label=cod:testa:decodificador,caption=Comando para executar o testbench da entidade decodificador.]
+  make all TESTBENCH=decodificador_tb
+\end{lstlisting}
+
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:decodificador}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/gtw_decodificador.png}
+\caption{Diagrama de Tempo do teste da entidade decodificador.}
+\label{fig:gtw:decodificador}
+\end{figure}
+
+Até implementamos a entidade e testbench do decodificador, deixando-o funcionando.
 
 A próxima entidade a ser criada então é a Unidade Lógica. Para esta entidade precisamos criar os componentes básicos que ainda não temos no projeto e que precisaremos para satisfazer a entidade unidadeLogica, sendo eles or2, nand2, nor2, xnor2. O comando para criá-los é apresentado no Código~\ref{cod:criar:outrasentbasicas}.
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
 \begin{lstlisting}[label=cod:criar:outrasentbasicas,caption=Comando para a criar entidades básicas para a Unidade Lógica.]
-  make new PROJECT=or2 ARCH=logica
-  make new PROJECT=nand2 ARCH=logica
-  make new PROJECT=nor2 ARCH=logica
-  make new PROJECT=xnor2 ARCH=logica
+  make new PROJECT=or2 ARCH=logica IN=a,b OUT=y
+  make new PROJECT=nand2 ARCH=logica IN=a,b OUT=y
+  make new PROJECT=nor2 ARCH=logica IN=a,b OUT=y
+  make new PROJECT=xnor2 ARCH=logica IN=a,b OUT=y
 \end{lstlisting}
+
+% or2
+O Código~\ref{cod:or2} mostra o código VHDL para a entidade or2 que foi criado pelo comando make, da mesma forma sendo necessário somente colocarmos o tipo das variáveis e implementarmos a função lógica (y <= a or b) para que o resultado seja gerado corretamente.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:or2,caption=Código VHDL da entidade or2]{ula/src/or2.vhd}
+
+No diretório testbench também foi criado o arquivo or2\_tb.vhd que é o testbench para a entidade or2, conforme podemos ver no Código~\ref{cod:or2_tb}, novamente alteramos <<type>> para std\_logic e criamos os casos de teste.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:or2_tb,caption=Código VHDL do testebench para entidade or2] {ula/testbench/or2_tb.vhd}
+
+Executando o comando make apresentado no Código~\ref{cod:testa:or2}, se tudo estiver correto, a entidade or2 será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
+
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\begin{lstlisting}[label=cod:testa:or2,caption=Comando para executar o testbench da entidade or2.]
+  make all TESTBENCH=or2_tb
+\end{lstlisting}
+
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:or2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/gtw_or2.png}
+\caption{Diagrama de Tempo do teste da entidade or2.}
+\label{fig:gtw:or2}
+\end{figure}
+
+% nand2
+O Código~\ref{cod:nand2} mostra o código VHDL para a entidade nand2 que foi criado pelo comando make, da mesma forma sendo necessário somente colocarmos o tipo das variáveis e implementarmos a função lógica (y <= a nand b) para que o resultado seja gerado corretamente.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:nand2,caption=Código VHDL da entidade nand2]{ula/src/nand2.vhd}
+
+No diretório testbench também foi criado o arquivo nand2\_tb.vhd que é o testbench para a entidade nand2, conforme podemos ver no Código~\ref{cod:nand2_tb}, novamente alteramos <<type>> para std\_logic e criamos os casos de teste.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:nand2_tb,caption=Código VHDL do testebench para entidade nand2] {ula/testbench/nand2_tb.vhd}
+
+Executando o comando make apresentado no Código~\ref{cod:testa:nand2}, se tudo estiver correto, a entidade nand2 será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
+
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\begin{lstlisting}[label=cod:testa:nand2,caption=Comando para executar o testbench da entidade nand2.]
+  make all TESTBENCH=nand2_tb
+\end{lstlisting}
+
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:nand2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/gtw_nand2.png}
+\caption{Diagrama de Tempo do teste da entidade nand2.}
+\label{fig:gtw:nand2}
+\end{figure}
+% nor2
+O Código~\ref{cod:nor2} mostra o código VHDL para a entidade nor2 que foi criado pelo comando make, da mesma forma sendo necessário somente colocarmos o tipo das variáveis e implementarmos a função lógica (y <= a nor b) para que o resultado seja gerado corretamente.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:nor2,caption=Código VHDL da entidade nor2]{ula/src/nor2.vhd}
+
+No diretório testbench também foi criado o arquivo nor2\_tb.vhd que é o testbench para a entidade nor2, conforme podemos ver no Código~\ref{cod:nor2_tb}, novamente alteramos <<type>> para std\_logic e criamos os casos de teste.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:nor2_tb,caption=Código VHDL do testebench para entidade nor2] {ula/testbench/nor2_tb.vhd}
+
+Executando o comando make apresentado no Código~\ref{cod:testa:nor2}, se tudo estiver correto, a entidade nor2 será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
+
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\begin{lstlisting}[label=cod:testa:nor2,caption=Comando para executar o testbench da entidade nor2.]
+  make all TESTBENCH=nor2_tb
+\end{lstlisting}
+
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:nor2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/gtw_nor2.png}
+\caption{Diagrama de Tempo do teste da entidade nor2.}
+\label{fig:gtw:nor2}
+\end{figure}
+
+% xnor2
+O Código~\ref{cod:xnor2} mostra o código VHDL para a entidade xnor2 que foi criado pelo comando make, da mesma forma sendo necessário somente colocarmos o tipo das variáveis e implementarmos a função lógica (y <= a xor b) para que o resultado seja gerado corretamente.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:xnor2,caption=Código VHDL da entidade xnor2]{ula/src/xnor2.vhd}
+
+No diretório testbench também foi criado o arquivo xnor2\_tb.vhd que é o testbench para a entidade xnor2, conforme podemos ver no Código~\ref{cod:xnor2_tb}, novamente alteramos <<type>> para std\_logic e criamos os casos de teste.
+
+\lstset{language=VHDL}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\lstinputlisting[label=cod:xnor2_tb,caption=Código VHDL do testebench para entidade xnor2] {ula/testbench/xnor2_tb.vhd}
+
+Executando o comando make apresentado no Código~\ref{cod:testa:xnor2}, se tudo estiver correto, a entidade xnor2 será analisada e compilada e o teste será executado e no final será apresentado a tela do gtkwave com o diagrama de tempo (forma de onda).
+
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
+\begin{lstlisting}[label=cod:testa:xnor2,caption=Comando para executar o testbench da entidade xnor2.]
+  make all TESTBENCH=xnor2_tb
+\end{lstlisting}
+
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:xnor2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{figuras/gtw_xnor2.png}
+\caption{Diagrama de Tempo do teste da entidade xnor2.}
+\label{fig:gtw:xnor2}
+\end{figure}
 
 Tendo todas as dependências satisfeitas, podemos então criar a entidade unidadeLogica, conforme o Código~\ref{cod:criar:unidadeLogica}.
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
 \begin{lstlisting}[label=cod:criar:unidadeLogica,caption=Comando para a criar a entidade unidadeLogica.]
-  make new PROJECT=unidadeLogica ARCH=estrutural
+  make new PROJECT=unidadeLogica ARCH=estrutural IN=A,B,OpAND,OpOR,OpNAND,OpNOR,OpXOR,OpXNOR,OpNOT OUT=S
 \end{lstlisting}
 
-Implementa-se a entidade e testbench da unidadeLogica, deixando-a funcionando.
+Implementa-se a entidade e o testbench da unidadeLogica, deixando-a funcionando.
+
+% unidadeLogica
 
 Até aqui, implementamos todos os componentes principais necessários para a implementação da ULA. Então podemos criar a entidade ULA, com o comando apresentado no Código~\ref{cod:criar:ULA}.
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=3pt}
 \begin{lstlisting}[label=cod:criar:ULA,caption=Comando para a criar a entidade ULA.]
-  make new PROJECT=ula ARCH=estrutural
+  make new PROJECT=ula ARCH=estrutural IN=A,B,Cin,F2,F1,F0 OUT=S,Cout
 \end{lstlisting}
 
-Verifica-se a implementação da entidade ULA e em seu testbench é necessário apenas a criação dos casos de teste. Testamos e a deixamos funcionando.
+Verifica-se a implementação da entidade ULA e em seu testbench é necessário apenas a criação dos casos de teste. 
+
+% ULA
+
+Testamos e a deixamos funcionando.
 A técnica do menor para o maior, por composição permite ir testando e vendo os resultados dos componentes até atingir o resultado maior que é o projeto como um todo.
 
 Se iniciássemos pela entidade ULA (do maior para o menor) iríamos poder testá-la somente no final, quando todos os componentes estivessem terminados, até lá, muitos erros iriam acontecer.
