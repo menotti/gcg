@@ -1,8 +1,15 @@
-\documentclass[a4paper,10pt]{report}
+\documentclass[a4paper,11pt]{report}
 \usepackage[utf8x]{inputenc}
 
 \usepackage[brazil]{babel}
+\usepackage[dvips]{graphicx}
 \usepackage{graphicx, url}
+
+\usepackage[center]{caption}
+\usepackage[alf,abnt-emphasize=bf,abnt-full-initials=yes]{abntcite} %Pacote abntex -  http://abntex.codigolivre.org.br/
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{setspace}
+
 \usepackage{listings} % para código fonte
 
 \usepackage{amssymb,amsmath}
@@ -103,7 +110,7 @@
 
 \section{GHDL Code Gen (gcg)}
 O projeto gcg tem como objetivo a criação de templates ou modelos para facilitar a criação, execução de projetos em VHDL na ferramenta GHDL.
-O código do gcg está disponível para download em sua página no google code (http://code.google.com/p/gcg/).
+O código do gcg está disponível para download em http://code.google.com/p/gcg/.
 Dentro do diretório do gcg/src tem uma diretório de templates (entidade e testbench), um arquivo README.txt (como os comandos básicos), o Makefile (que faz todo o trabalho).
 Os comandos de utilização seguem a sintaxe apresentada na Tabela~\ref{tab:comandos_gcg}.
 
@@ -224,7 +231,7 @@ UnidadeLogica & or3, and2, or2, nand2, nor2, xor2, xnor2 e inversor \\
 \label{tab:dep_componentes}
 \end{table} 
 
-\section{Criação dos Componentes com o t2ghdl}
+\section{Criação dos Componentes com o gcg}
 
 Para satisfazer as dependências da entidade Somador precisamos então criar os componentes básicos, and2, and3, or3 e xor2. O Código~\ref{cod:criar:ent_basicas} apresenta os comandos do Makefile para obter esse resultado. Note que a arquitetura para esses elementos básicos, neste caso portas lógicas, foi definida como lógica, por meio da variável ARCH.
 
@@ -338,7 +345,7 @@ Executando o comando make apresentado no Código~\ref{cod:testa:and2}, se tudo e
   make all TESTBENCH=and2_tb
 \end{lstlisting}
 
-O digrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:and2}.
+O diagrama do resultado pode ser visualizado na Figura~\ref{fig:gtw:and2}.
 
 \begin{figure}[H]
 \centering
