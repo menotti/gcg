@@ -116,7 +116,7 @@ new : checkvars checkdirs
 	$(call criarcabecalho,"Project","$(SRCDIR)/$(PROJECT)$(VHDLEX)","Entity Description: $(PROJECT)")
 	@sed -e 's/<<ENTITY_NAME>>/$(PROJECT)/g' templates/entity.vhd | sed -e 's/<<IN_P>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/&/g' | sed 's/,/, /g')/g' | sed -e 's/<<OUT_P>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/&/g' | sed 's/,/, /g')/g' | sed -e 's/<<ARCH_TYPE>>/$(ARCH)/g' >> $(SRCDIR)/$(PROJECT)$(VHDLEX)
 
-# Se o tipo é Estrutural que precisa da declaração de componentes.
+# It ARCH type is structural or estrutural the components declaration is included.
 ifeq ($(strip $(ARCH)),$(filter $(strip $(ARCH)),$(TYPE_WITH_COMPONENTS) $(TYPE_WITH_COMPONENTS_EN)))
 	@echo " Detected ARCH=$(ARCH)."
 	@echo "  Declaring components."
