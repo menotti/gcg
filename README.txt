@@ -23,6 +23,9 @@ Where:
 PROJECT: Entity Name that will designed.
 ARCH: Possible values {logical, structural, conditional}, using "structural" 
 the components declaration will be made.
+IN: inputs ports.
+OUT: outputs ports.
+
 
 Note:
 The variables that are passed to make or should be written without space (IN=port1,port2,portN) or with spaces and quotes (IN="port1, porta2,

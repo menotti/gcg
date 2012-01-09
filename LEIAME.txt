@@ -25,6 +25,8 @@ Onde:
 PROJECT: Nome da entidade que está sendo projetada.
 ARCH: valores possíveis {logica, estrutural, condicional}, usando "estrutural" 
 a declaração dos componentes será feita.
+IN: portas de entrada.
+OUT: portas de saida.
 
 Observação:
 As variáveis que são passadas ao make ou devem ser escritas sem espaço (IN=porta1,porta2,portaN) ou com espaços e entre aspas (IN="porta1, porta2, 
