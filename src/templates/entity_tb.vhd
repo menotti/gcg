@@ -6,48 +6,48 @@ entity <<ENTITY_NAME>>_tb is
 end <<ENTITY_NAME>>_tb;
 
 architecture <<ARCH_TYPE>> of <<ENTITY_NAME>>_tb is
-  --  Declaração do componente.
+  --  Component declaration.
   component <<ENTITY_NAME>>
 	port (<<IN_P>>: in <<type>>; <<OUT_P>>: out <<type>>);
   end component;
-  --  Especifica qual a entidade está vinculada com o componente.
+  --  Specifies the entity which is linked with the component. (Especifica qual a entidade está vinculada com o componente).
   for <<ENTITY_NAME>>_0: <<ENTITY_NAME>> use entity work.<<ENTITY_NAME>>;
       signal <<s_t_sinais>>: <<type>>;
   begin
-    --  Instanciação do Componente.
+    --  Component instantiation.
 	--  port map (<<p_in_1>> => <<s_t_in_1>>)
 	<<ENTITY_NAME>>_0: <<ENTITY_NAME>> port map (<<port_map_entity_tb>>);
 
-    --  Processo que faz o trabalho.
+    --  Process that works.
     process
-		-- Um registro é criado com as entradas e saídas da entidade.
+		-- A record is created with the inputs and outputs of the entity.
 		-- (<<entrada1>>, <<entradaN>>, <<saida1>>, <<saidaN>>)
 		type pattern_type is record
-			-- entradas.
+			-- inputs.
 			<<record_in_vars>>: <<type>>;
-			-- saídas.
+			-- outputs.
 			<<record_out_vars>>: <<type>>;
 		end record;
 
-		--  Os padrões de entrada que são aplicados (injetados) às entradas.
+		--  The input patterns are applied (injected) to the inputs of the entity under test.
 		type pattern_array is array (natural range <>) of pattern_type;
-		-- Casos de teste.
+		-- Test cases.
 		constant patterns : pattern_array :=
 		(
-			(casos de testes com <<case_test_model>> colunas, '0'...),
+			(test cases with <<case_test_model>> columns, '0'...),
 			(...)
 		);
 		begin
-		--  Checagem de padrões.
+		-- Injects the inputs and check thte outputs.
 		for i in patterns'range loop
-			--  Injeta as entradas.
+			-- Injects the inputs.
 			<<inputs_signals_injection>>
-			--  Aguarda os resultados.
+			-- wait for results.
 			wait for 1 ns;
-			--  Checa o resultado com a saída esperada no padrão.
+			-- Checks the result with the expected output in the pattern.
 			<<asserts_vars>>
 		end loop;
-		assert false report "Fim do teste." severity note;
+		assert false report "End of test." severity note;
 		--  Wait forever; Isto finaliza a simulação.
 		wait;
 	end process;

@@ -10,7 +10,7 @@ architecture <<ARCH_TYPE>> of <<ENTITY_NAME>> is
   <<DECL_COMPONENTS>>
   <<DECL_SIGNALS>>
 begin
-  -- Comandos.
+  -- Commands.
   <<DECL_COMP_INSTANCES>>
 end <<ARCH_TYPE>>;
 
