@@ -1,0 +1,41 @@
+O ghdl está instalado nas máquinas do IC-03, se necessário instale o 
+gktwave em sua conta.
+
+
+Escreva o  seu projeto  Controle.vhd, copie o  arquivo tb_Controle.vhd
+para o mesmo diretório onde  se encontra o seu Controle.vhd e execute,
+na mesma ordem os comandos abaixo:
+
+(O manual do ghdl pode ser encontrado em : 
+
+http://ghdl.free.fr/ghdl/index.html)
+
+
+
+
+1) ghdl -a Controle.vhd    (analisa  o arquivo Controle.vhd)
+
+2) ghdl -a tb_Controle.vhd (analisa  o arquivo tb_Controle.vhd)
+
+3) ghdl -e  tb_Controle    (elabora a entidade tb_Controle)
+
+4) ghdl -r tb_Controle  --vcd=Controle.vcd (simula a entidade
+                           tb_controle e gera o arquivo Controle.vcd, 
+                           formato aceito pelo gtkwave) 
+
+   ghdl -r tb_Controle  --wave=Controle.ghw (simula a entidade
+                           tb_controle e gera o arquivo Controle.ghw, 
+                           formato aceito pelo gtkwave)
+
+
+5) gtkwave Controle.vcd &  -- formato padrão do gtkwave, porém não permite
+                              ver sinais auxiliares dentro de um componete
+
+   gtkwave Controle.ghw &  -- formato não padrão do gtkwave, porém permite
+                              ver sinais auxiliares dentro de um componete
+
+
+
+OBS.: para modificações no arquivo tb_Controle.vhd é necessário
+      executar os passos 2) em diante.
+
