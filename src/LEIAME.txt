@@ -51,8 +51,16 @@ make view TESTBENCH=nomeEntidade_tb
 # Comando Make all (faz tudo): compile, run and view.
 make all TESTBENCH=entityName_tb
 
-
-
 Comando para limpar o projeto (Apagar diretorio de simulacao)
 ------------------------------------------------------------------------
 make clean
+
+Comandos com acessibilidade usando o leitor de forma de onda wavevox.
+------------------------------------------------------------------------
+Ouvir os resultados usando wavevox
+------------------------------------------------------------------------
+make viewacc
+
+Compilar, Executar e Ouvir os resultados.
+------------------------------------------------------------------------
+make allacc

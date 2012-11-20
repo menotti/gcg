@@ -31,6 +31,9 @@ GHDL_SIM_OPT = --assert-level=error --trace-signals --disp-tree --stats --stop-t
 # Wave form viewer. (timing diagrams).
 WAVEFORM_VIEWER = gtkwave
 
+# Wave form speaker. (timing diagrams).
+WAVEFORM_SPEAKER = python3 wavevox.py
+
 # Auxiliary commands.
 RM_CMD = rm -rf
 MKDIR_CMD = mkdir
@@ -53,8 +56,11 @@ define criarcabecalho
 	@echo " " >> $2
 endef
 
-# Targets do make.
+# Targets of make.
 all: compile run view
+
+# Targets of make (accessible).
+allacc: compile run viewacc
 
 checktb :
 ifeq ($(strip $(TESTBENCH)),)
@@ -103,7 +109,11 @@ run : checktb
 	@$(SIMDIR)/$(TESTBENCH) $(GHDL_SIM_OPT) --vcdgz=$(SIMDIR)/$(TESTBENCH).vcdgz                                      
  
 view : checktb 
-	gunzip --stdout $(SIMDIR)/$(TESTBENCH).vcdgz | $(WAVEFORM_VIEWER) --vcd                                               
+	gunzip --stdout $(SIMDIR)/$(TESTBENCH).vcdgz | $(WAVEFORM_VIEWER) --vcd
+
+viewacc : checktb
+	gunzip --stdout $(SIMDIR)/$(TESTBENCH).vcdgz > $(SIMDIR)/$(TESTBENCH).vcd 
+	$(WAVEFORM_SPEAKER) $(SIMDIR)/$(TESTBENCH).vcd
  
 clean :
 	$(GHDL_CMD) --clean --workdir=$(SIMDIR)
@@ -140,3 +150,4 @@ endif
 	
 	@echo "Project $(PROJECT) created successfully."
 	@echo "Done."
+	

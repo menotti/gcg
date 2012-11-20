@@ -52,3 +52,12 @@ make all TESTBENCH=entityName_tb
 Cleaning project source code (delete simulation directory)
 ------------------------------------------------------------------------
 make clean
+
+Accessible commands using wavevox waveform reader.
+Hear results using wavevox
+------------------------------------------------------------------------
+make viewacc
+
+Compile, Run and hear results.
+------------------------------------------------------------------------
+make allacc
