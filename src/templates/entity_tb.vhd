@@ -1,6 +1,11 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
+use ieee.std_logic_arith.all;
+
+-- print messages.
+use std.textio.all;
+use ieee.std_logic_textio.all;
 
 entity <<ENTITY_NAME>>_tb is
 end <<ENTITY_NAME>>_tb;
@@ -13,6 +18,28 @@ architecture <<ARCH_TYPE>> of <<ENTITY_NAME>>_tb is
   --  Specifies the entity which is linked with the component. (Especifica qual a entidade está vinculada com o componente).
   for <<ENTITY_NAME>>_0: <<ENTITY_NAME>> use entity work.<<ENTITY_NAME>>;
       signal <<s_t_sinais>>: <<type>>;
+  
+  -- procedure print messages definition.
+  procedure print_message(<<params_in>>: <<type>>; <<params_out>>: <<type>>; <<params_exp>>: <<type>>) is
+  variable line_out: line;
+  begin
+    write(line_out, string'("   At time "));
+    write(line_out, now);
+    write(line_out, string'(", inputs ["));
+    <<print_in_var_values>>
+    write(line_out, string'("]"));
+    
+    write(line_out, string'(", outputs ["));
+    <<print_out_var_values>>
+    write(line_out, string'("]"));
+    if <<compare_gen_exp>> then
+        write(line_out, string'(" [OK]"));
+    else
+        write(line_out, string'(" [Error]"));
+    end if;
+    writeline(output, line_out);
+  end procedure print_message;
+  
   begin
     --  Component instantiation.
 	--  port map (<<p_in_1>> => <<s_t_in_1>>)
@@ -20,6 +47,8 @@ architecture <<ARCH_TYPE>> of <<ENTITY_NAME>>_tb is
 
     --  Process that works.
     process
+        -- line to print.
+        variable line_out: line;
 		-- A record is created with the inputs and outputs of the entity.
 		-- (<<entrada1>>, <<entradaN>>, <<saida1>>, <<saidaN>>)
 		type pattern_type is record
@@ -38,6 +67,11 @@ architecture <<ARCH_TYPE>> of <<ENTITY_NAME>>_tb is
 			(...)
 		);
 		begin
+        -- Message starting...
+        write(line_out, string'("Running testbench: <<ENTITY_NAME>>_tb."));
+        writeline(output, line_out);
+        write(line_out, string'(" Testing entity: <<ENTITY_NAME>>."));
+        writeline(output, line_out);
 		-- Injects the inputs and check thte outputs.
 		for i in patterns'range loop
 			-- Injects the inputs.
@@ -45,8 +79,12 @@ architecture <<ARCH_TYPE>> of <<ENTITY_NAME>>_tb is
 			-- wait for results.
 			wait for 1 ns;
 			-- Checks the result with the expected output in the pattern.
+            print_message(<<params_in_print_call>>, <<params_out_print_call>>, <<params_exp_print_call>>);
 			<<asserts_vars>>
 		end loop;
+        
+        write(line_out, string'("Execution of <<ENTITY_NAME>>_tb finished."));
+        writeline(output, line_out);      
 		assert false report "End of test." severity note;
 		--  Wait forever; Isto finaliza a simulação.
 		wait;

@@ -26,7 +26,8 @@ GHDL_CMD = ghdl
 GHDL_FLAGS  = --std=02 --ieee=synopsys --warn-no-vital-generic
 
 # Parameters for simulations on GHDL.
-GHDL_SIM_OPT = --assert-level=error --trace-signals --disp-tree --stats --stop-time=1000ns
+# GHDL_SIM_OPT = --assert-level=error --trace-signals --disp-tree --stats --stop-time=1000ns
+GHDL_SIM_OPT = --assert-level=error --stop-time=1000ns
 
 # Wave form viewer. (timing diagrams).
 WAVEFORM_VIEWER = gtkwave
@@ -43,7 +44,6 @@ USE_INF="Use make new PROJECT=entityName ARCH=ArchitectureType IN=port1,port2,po
 # Type that supports components declaration.
 TYPE_WITH_COMPONENTS=estrutural
 TYPE_WITH_COMPONENTS_EN=structural
-
 
 # Functions.
 # Add header in the files.
@@ -100,22 +100,27 @@ ifeq (,$(findstring $(SIMDIR),$(wildcard $(SIMDIR) )))
 endif	
 
 compile : checktb
+	@echo "Compiling..."
 	mkdir -p $(SIMDIR)
 	$(GHDL_CMD) -i $(GHDL_FLAGS) --workdir=$(SIMDIR) --work=work $(TESTBENCHPATH) $(FILES)
 	$(GHDL_CMD) -m  $(GHDL_FLAGS) --workdir=$(SIMDIR) --work=work $(TESTBENCH)
 	@mv $(TESTBENCH) $(SIMDIR)/$(TESTBENCH)                                                                                
  
 run : checktb
+	@echo "Running..."
 	@$(SIMDIR)/$(TESTBENCH) $(GHDL_SIM_OPT) --vcdgz=$(SIMDIR)/$(TESTBENCH).vcdgz                                      
  
-view : checktb 
+view : checktb
+	@echo "Viewing on ${WAVEFORM_VIEWER}..."
 	gunzip --stdout $(SIMDIR)/$(TESTBENCH).vcdgz | $(WAVEFORM_VIEWER) --vcd
 
 viewacc : checktb
+	@echo "Hearing on ${WAVEFORM_SPEAKER}..."
 	gunzip --stdout $(SIMDIR)/$(TESTBENCH).vcdgz > $(SIMDIR)/$(TESTBENCH).vcd 
 	$(WAVEFORM_SPEAKER) $(SIMDIR)/$(TESTBENCH).vcd
  
 clean :
+	@echo "Clening..."
 	$(GHDL_CMD) --clean --workdir=$(SIMDIR)
 	$(RM_CMD) $(SIMDIR)
 
@@ -146,8 +151,24 @@ endif
 	@sed -i 's/<<record_out_vars>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ vo_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
 	@sed -i 's/<<case_test_model>>/$(shell echo "$(IN),$(OUT)" | sed 's/ //g' | sed 's/,/, /g' | wc -w)/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
 	@sed -i 's/<<inputs_signals_injection>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/s_t_& <= patterns(i).vi_&;\\n\\t\\t\\t/g' | sed 's/,//g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
-	@sed -i 's/<<asserts_vars>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/assert s_t_& = patterns(i).vo_&\\treport "Valor de s_t_& não confere com o resultado esperado." severity error;\\n\\t\\t\\t/g' | sed 's/,//g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+	@sed -i 's/<<asserts_vars>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/assert (s_t_& = patterns(i).vo_&)\\treport "Valor de s_t_& não confere com o resultado esperado." severity error;\\n\\t\\t\\t/g' )/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+	
+	@sed -i 's/<<params_in>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ pi_s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
+	@sed -i 's/<<params_out>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ po_s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+	@sed -i 's/<<params_exp>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ pe_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
+	
+	@sed -i 's/<<print_in_var_values>>/$(shell echo "$(IN)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/write(line_out, string<<SQUOTE>>(" s_t_&: "));\\n\\twrite(line_out, pi_s_t_&);\\n\\t/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
+	@sed -i "s/<<SQUOTE>>/\'/g" $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
+	
+	@sed -i 's/<<print_out_var_values>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/write(line_out, string<<SQUOTE>>(" s_t_&: "));\\n\\twrite(line_out, string<<SQUOTE>>("(generated: "));\\n\\twrite(line_out, po_s_t_&);\\n\\twrite(line_out, string<<SQUOTE>>(", expected: "));\\n\\twrite(line_out, pe_&);\\n\\twrite(line_out, string<<SQUOTE>>(")"));\\n\\t/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
+	@sed -i "s/<<SQUOTE>>/\'/g" $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+		
+	@sed -i 's/<<compare_gen_exp>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/(s_t_& = pe_&) and/g' | sed -e 's/\(.*\)and/\1/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+	@sed -i 's/<<params_in_print_call>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
+	@sed -i 's/<<params_out_print_call>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+	@sed -i 's/<<params_exp_print_call>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ patterns(i).vo_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
+	
 	
 	@echo "Project $(PROJECT) created successfully."
 	@echo "Done."
-	
