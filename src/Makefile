@@ -151,7 +151,7 @@ endif
 	@sed -i 's/<<record_out_vars>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ vo_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
 	@sed -i 's/<<case_test_model>>/$(shell echo "$(IN),$(OUT)" | sed 's/ //g' | sed 's/,/, /g' | wc -w)/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
 	@sed -i 's/<<inputs_signals_injection>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/s_t_& <= patterns(i).vi_&;\\n\\t\\t\\t/g' | sed 's/,//g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
-	@sed -i 's/<<asserts_vars>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/assert (s_t_& = patterns(i).vo_&)\\treport "Valor de s_t_& não confere com o resultado esperado." severity error;\\n\\t\\t\\t/g' )/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+	@sed -i 's/<<asserts_vars>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/assert (s_t_& = patterns(i).vo_&)\\treport "Valor de s_t_& não confere com o resultado esperado." severity error;\\n\\t\\t\\t/g' )/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
 	
 	@sed -i 's/<<params_in>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ pi_s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
 	@sed -i 's/<<params_out>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ po_s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
