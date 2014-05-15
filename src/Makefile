@@ -1,6 +1,6 @@
 # gcg Project
 # GHDL Code Gen (gcg) - (http://code.google.com/p/gcg/)
-# 
+#
 # Rogério A. Gonçalves
 # rogerio.rag@gmail.com
 # http://rag.pro.br
@@ -17,10 +17,10 @@ SIMDIR = simulation
 # vhdl files.
 FILES = src/*
 VHDLEX = .vhd
- 
+
 # testbench (test file).
 TESTBENCHPATH = $(TBDIR)/${TESTBENCH}$(VHDLEX)
- 
+
 # Configuration of GHDL.
 GHDL_CMD = ghdl
 GHDL_FLAGS  = --std=02 --ieee=synopsys --warn-no-vital-generic
@@ -91,84 +91,92 @@ checkdirs :
 	@echo "Making Project Diretories:: $(SRCDIR) $(TBDIR) $(SIMDIR)"
 ifeq (,$(findstring $(SRCDIR),$(wildcard $(SRCDIR) )))
 	$(MKDIR_CMD) $(SRCDIR)
-endif	
+endif
 ifeq (,$(findstring $(TBDIR),$(wildcard $(TBDIR) )))
 	$(MKDIR_CMD) $(TBDIR)
 endif
 ifeq (,$(findstring $(SIMDIR),$(wildcard $(SIMDIR) )))
 	$(MKDIR_CMD) $(SIMDIR)
-endif	
+endif
 
 compile : checktb
 	@echo "Compiling..."
 	mkdir -p $(SIMDIR)
 	$(GHDL_CMD) -i $(GHDL_FLAGS) --workdir=$(SIMDIR) --work=work $(TESTBENCHPATH) $(FILES)
 	$(GHDL_CMD) -m  $(GHDL_FLAGS) --workdir=$(SIMDIR) --work=work $(TESTBENCH)
-	@mv $(TESTBENCH) $(SIMDIR)/$(TESTBENCH)                                                                                
- 
+	@mv $(TESTBENCH) $(SIMDIR)/$(TESTBENCH)
+
 run : checktb
 	@echo "Running..."
-	@$(SIMDIR)/$(TESTBENCH) $(GHDL_SIM_OPT) --vcdgz=$(SIMDIR)/$(TESTBENCH).vcdgz                                      
- 
+	@$(SIMDIR)/$(TESTBENCH) $(GHDL_SIM_OPT) --vcdgz=$(SIMDIR)/$(TESTBENCH).vcdgz
+
 view : checktb
 	@echo "Viewing on ${WAVEFORM_VIEWER}..."
 	gunzip --stdout $(SIMDIR)/$(TESTBENCH).vcdgz | $(WAVEFORM_VIEWER) --vcd
 
 viewacc : checktb
 	@echo "Hearing on ${WAVEFORM_SPEAKER}..."
-	gunzip --stdout $(SIMDIR)/$(TESTBENCH).vcdgz > $(SIMDIR)/$(TESTBENCH).vcd 
+	gunzip --stdout $(SIMDIR)/$(TESTBENCH).vcdgz > $(SIMDIR)/$(TESTBENCH).vcd
 	$(WAVEFORM_SPEAKER) $(SIMDIR)/$(TESTBENCH).vcd
- 
+
 clean :
-	@echo "Clening..."
+	@echo "Cleaning..."
 	$(GHDL_CMD) --clean --workdir=$(SIMDIR)
 	$(RM_CMD) $(SIMDIR)
 
 new : checkvars checkdirs
 	@echo "Building the project ${PROJECT}"
 
+	python new.py $(PROJECT) $(ARCH) $(IN) $(OUT)
+
 # Creating entity and testbench files.
-	$(call criarcabecalho,"Project","$(SRCDIR)/$(PROJECT)$(VHDLEX)","Entity Description: $(PROJECT)")
-	@sed -e 's/<<ENTITY_NAME>>/$(PROJECT)/g' templates/entity.vhd | sed -e 's/<<IN_P>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/&/g' | sed 's/,/, /g')/g' | sed -e 's/<<OUT_P>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/&/g' | sed 's/,/, /g')/g' | sed -e 's/<<ARCH_TYPE>>/$(ARCH)/g' >> $(SRCDIR)/$(PROJECT)$(VHDLEX)
+#	$(call criarcabecalho,"Project","$(SRCDIR)/$(PROJECT)$(VHDLEX)","Entity Description: $(PROJECT)")
+#	@sed -e 's/<<ENTITY_NAME>>/$(PROJECT)/g' templates/entity.vhd | sed -e 's/<<IN_P>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/&/g' | sed 's/,/, /g')/g' | sed -e 's/<<OUT_P>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/&/g' | sed 's/,/, /g')/g' | sed -e 's/<<ARCH_TYPE>>/$(ARCH)/g' >> $(SRCDIR)/$(PROJECT)$(VHDLEX)
 
 # It ARCH type is structural or estrutural the components declaration is included.
-ifeq ($(strip $(ARCH)),$(filter $(strip $(ARCH)),$(TYPE_WITH_COMPONENTS) $(TYPE_WITH_COMPONENTS_EN)))
-	@echo " Detected ARCH=$(ARCH)."
-	@echo "  Declaring components."
-	@sed -i 's/<<DECL_COMPONENTS>>/$(shell cat templates/decl_components.vhd)/g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
-	@sed -i 's/<<DECL_SIGNALS>>/$(shell cat templates/decl_signals.vhd)/g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
-	@sed -i 's/<<DECL_COMP_INSTANCES>>/$(shell cat templates/decl_components_instances.vhd)/g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
-else
-	@sed -i 's/<<DECL_COMPONENTS>>//g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
-	@sed -i 's/<<DECL_SIGNALS>>//g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
-	@sed -i 's/<<DECL_COMP_INSTANCES>>//g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
-endif
+#ifeq ($(strip $(ARCH)),$(filter $(strip $(ARCH)),$(TYPE_WITH_COMPONENTS) $(TYPE_WITH_COMPONENTS_EN)))
+#	@echo " Detected ARCH=$(ARCH)."
+#	@echo "  Declaring components."
+#	@sed -i 's/<<DECL_COMPONENTS>>/$(shell cat templates/decl_components.vhd)/g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
+#	@sed -i 's/<<DECL_SIGNALS>>/$(shell cat templates/decl_signals.vhd)/g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
+#	@sed -i 's/<<DECL_COMP_INSTANCES>>/$(shell cat templates/decl_components_instances.vhd)/g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
+#else
+#	@sed -i 's/<<DECL_COMPONENTS>>//g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
+#	@sed -i 's/<<DECL_SIGNALS>>//g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
+#	@sed -i 's/<<DECL_COMP_INSTANCES>>//g' $(SRCDIR)/$(PROJECT)$(VHDLEX)
+#endif
 
-	$(call criarcabecalho,"Testbench","$(TBDIR)/$(PROJECT)_tb$(VHDLEX)","Test of $(PROJECT) entity.")
-	@sed -e 's/<<ENTITY_NAME>>/$(PROJECT)/g' templates/entity_tb.vhd | sed -e 's/<<IN_P>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/&/g' | sed 's/,/, /g')/g' | sed -e 's/<<OUT_P>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/&/g' | sed 's/,/, /g')/g' | sed -e 's/<<ARCH_TYPE>>/$(ARCH)/g' | sed -e 's/<<s_t_sinais>>/$(shell echo "$(IN),$(OUT)" | sed 's/ //g' | sed 's/^/s_t_/' | sed 's/,/, s_t_/g')/g' >> $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
-	@sed -i 's/<<port_map_entity_tb>>/$(shell echo "$(IN),$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ &=>s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
-	@sed -i 's/<<record_in_vars>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ vi_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
-	@sed -i 's/<<record_out_vars>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ vo_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
-	@sed -i 's/<<case_test_model>>/$(shell echo "$(IN),$(OUT)" | sed 's/ //g' | sed 's/,/, /g' | wc -w)/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
-	@sed -i 's/<<inputs_signals_injection>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/s_t_& <= patterns(i).vi_&;\\n\\t\\t\\t/g' | sed 's/,//g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
-	@sed -i 's/<<asserts_vars>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/assert (s_t_& = patterns(i).vo_&)\\treport "Valor de s_t_& não confere com o resultado esperado." severity error;\\n\\t\\t\\t/g' )/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
-	
-	@sed -i 's/<<params_in>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ pi_s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
-	@sed -i 's/<<params_out>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ po_s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
-	@sed -i 's/<<params_exp>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ pe_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
-	
-	@sed -i 's/<<print_in_var_values>>/$(shell echo "$(IN)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/write(line_out, string<<SQUOTE>>(" s_t_&: "));\\n\\twrite(line_out, pi_s_t_&);\\n\\t/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
-	@sed -i "s/<<SQUOTE>>/\'/g" $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
-	
-	@sed -i 's/<<print_out_var_values>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/write(line_out, string<<SQUOTE>>(" s_t_&: "));\\n\\twrite(line_out, string<<SQUOTE>>("(generated: "));\\n\\twrite(line_out, po_s_t_&);\\n\\twrite(line_out, string<<SQUOTE>>(", expected: "));\\n\\twrite(line_out, pe_&);\\n\\twrite(line_out, string<<SQUOTE>>(")"));\\n\\t/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
-	@sed -i "s/<<SQUOTE>>/\'/g" $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
-		
-	@sed -i 's/<<compare_gen_exp>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/(s_t_& = pe_&) and/g' | sed -e 's/\(.*\)and/\1/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+#	$(call criarcabecalho,"Testbench","$(TBDIR)/$(PROJECT)_tb$(VHDLEX)","Test of $(PROJECT) entity.")
 
-	@sed -i 's/<<params_in_print_call>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
-	@sed -i 's/<<params_out_print_call>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
-	@sed -i 's/<<params_exp_print_call>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ patterns(i).vo_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX) 
-	
-	
+#	@sed -e 's/<<ENTITY_NAME>>/$(PROJECT)/g' templates/entity_tb.vhd | sed -e 's/<<IN_P>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/&/g' | sed 's/,/, /g')/g' | sed -e 's/<<OUT_P>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/&/g' | sed 's/,/, /g')/g' | sed -e 's/<<ARCH_TYPE>>/$(ARCH)/g' | sed -e 's/<<s_t_sinais>>/$(shell echo "$(IN),$(OUT)" | sed 's/ //g' | sed 's/^/s_t_/' | sed 's/,/, s_t_/g')/g' >> $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+#	@sed -i 's/<<port_map_entity_tb>>/$(shell echo "$(IN),$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ &=>s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+#	@sed -i 's/<<record_in_vars>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ vi_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+#	@sed -i 's/<<record_out_vars>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ vo_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+#	@sed -i 's/<<case_test_model>>/$(shell echo "$(IN),$(OUT)" | sed 's/ //g' | sed 's/,/, /g' | wc -w)/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+#	@sed -i 's/<<inputs_signals_injection>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/s_t_& <= patterns(i).vi_&;\\n\\t\\t\\t/g' | sed 's/,//g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+#	@sed -i 's/<<asserts_vars>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/assert (s_t_& = patterns(i).vo_&)\\treport "Valor de s_t_& não confere com o resultado esperado." severity error;\\n\\t\\t\\t/g' )/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+#	@sed -i 's/<<params_in>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ pi_s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+#	@sed -i 's/<<params_out>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ po_s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+#	@sed -i 's/<<params_exp>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ pe_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+#	@sed -i 's/<<print_in_var_values>>/$(shell echo "$(IN)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/write(line_out, string<<SQUOTE>>(" s_t_&: "));\\n\\twrite(line_out, pi_s_t_&);\\n\\t/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+#	@sed -i "s/<<SQUOTE>>/\'/g" $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+#	@sed -i 's/<<print_out_var_values>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/write(line_out, string<<SQUOTE>>(" s_t_&: "));\\n\\twrite(line_out, string<<SQUOTE>>("(generated: "));\\n\\twrite(line_out, po_s_t_&);\\n\\twrite(line_out, string<<SQUOTE>>(", expected: "));\\n\\twrite(line_out, pe_&);\\n\\twrite(line_out, string<<SQUOTE>>(")"));\\n\\t/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+#	@sed -i "s/<<SQUOTE>>/\'/g" $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+#	@sed -i 's/<<compare_gen_exp>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed 's/,/ /g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/(s_t_& = pe_&) and/g' | sed -e 's/\(.*\)and/\1/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
+#	@sed -i 's/<<params_in_print_call>>/$(shell echo "$(IN)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+#	@sed -i 's/<<params_out_print_call>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ s_t_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+#	@sed -i 's/<<params_exp_print_call>>/$(shell echo "$(OUT)" | sed 's/ //g' | sed -e 's/[a-zA-Z_$$][a-zA-Z0-9_$$]*/ patterns(i).vo_&/g')/g' $(TBDIR)/$(PROJECT)_tb$(VHDLEX)
+
 	@echo "Project $(PROJECT) created successfully."
 	@echo "Done."
